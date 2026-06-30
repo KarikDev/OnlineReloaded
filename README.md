@@ -12,9 +12,6 @@
   <img src="https://img.shields.io/badge/Status-In%20Development-blue?style=for-the-badge">
   <img src="https://img.shields.io/badge/License-All%20Rights%20Reserved-red?style=for-the-badge">
 </p>
-<p align="center">
- <img src="https://img.shields.io/github/stars/KarikDev/OnlineReloaded?style=for-the-badge">
-</p>
 
 
 Online Reloaded is an ambitious community-driven remake of GTA Online, recreating nearly every iconic feature while delivering faster loading times, better performance, and a platform that can continue evolving alongside the GTA community for years to come.
