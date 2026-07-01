@@ -38,6 +38,8 @@ chat_theme 'gtao' {
 
 files {
     'modules/ui/loadingscreen/index.html',
+    'modules/ui/loadingscreen/bg.png',
 }
 
 loadscreen 'modules/ui/loadingscreen/index.html'
+loadscreen_manual_shutdown 'yes'  -- ← add this

@@ -230,6 +230,17 @@
     to   { transform: scaleX(1); opacity: 1; }
   }
 
+  /* ── hide FiveM's default loading scroller ── */
+  #fivem-loading-overlay,
+  #loadingScreen,
+  .loadingScreen,
+  #overlay,
+  iframe[src*="nui-game-internal"] {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+
   /* ── intro flash ── */
   .flash {
     position: fixed;
@@ -287,38 +298,24 @@
 </div>
 
 <script>
-  const bar   = document.getElementById('bar');
-  const pct   = document.getElementById('pct-label');
-  const stage = document.getElementById('stage-label');
+  const bar    = document.getElementById('bar');
+  const pct    = document.getElementById('pct-label');
+  const stage  = document.getElementById('stage-label');
   const pcount = document.getElementById('player-count');
 
   const stages = [
-    { label: 'Connecting',        end: 12  },
-    { label: 'Downloading assets',end: 45  },
-    { label: 'Loading map',       end: 72  },
-    { label: 'Initializing world',end: 90  },
-    { label: 'Almost ready',      end: 100 },
+    { label: 'Connecting',         end: 12  },
+    { label: 'Downloading assets', end: 45  },
+    { label: 'Loading map',        end: 72  },
+    { label: 'Initializing world', end: 90  },
+    { label: 'Almost ready',       end: 100 },
   ];
 
-  let current = 0;
-  let progress = 0;
-
-  // Listen for FiveM NUI messages for real progress
-  window.addEventListener('message', (e) => {
-    const d = e.data;
-    if (d.eventName === 'loadProgress') {
-      setProgress(Math.round(d.loadFraction * 100));
-    }
-    if (d.eventName === 'onClientResourceStart') {
-      // bump progress slightly on each resource start
-    }
-    if (d.players) {
-      pcount.textContent = d.players + ' players online';
-    }
-  });
+  // true when running inside FiveM's CEF
+  const isFiveM = /FiveM|CitizenFX/i.test(navigator.userAgent);
 
   function setProgress(val) {
-    progress = val;
+    val = Math.max(0, Math.min(100, Math.round(val)));
     bar.style.width = val + '%';
     pct.textContent = val + '%';
     for (let i = stages.length - 1; i >= 0; i--) {
@@ -329,14 +326,28 @@
     }
   }
 
-  // Demo animation — remove or comment out when using on a real server
-  // (FiveM will drive progress via the message events above)
-  let demo = 0;
-  const demoInterval = setInterval(() => {
-    demo += Math.random() * 2.5 + 0.3;
-    if (demo >= 100) { demo = 100; clearInterval(demoInterval); }
-    setProgress(Math.round(demo));
-  }, 80);
+  // FiveM native progress events
+  window.addEventListener('message', (e) => {
+    const d = e.data;
+    if (!d) return;
+
+    if (d.eventName === 'loadProgress') {
+      setProgress(d.loadFraction * 100);
+    }
+    if (d.players !== undefined) {
+      pcount.textContent = d.players + ' players online';
+    }
+  });
+
+  // Browser-only demo — never runs in FiveM
+  if (!isFiveM) {
+    let demo = 0;
+    const demoInterval = setInterval(() => {
+      demo += Math.random() * 2.5 + 0.3;
+      if (demo >= 100) { demo = 100; clearInterval(demoInterval); }
+      setProgress(demo);
+    }, 80);
+  }
 </script>
 </body>
 </html>
