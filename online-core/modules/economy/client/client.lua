@@ -3,15 +3,27 @@ local moneyTypes = {
     bank = `BANK_BALANCE`,
 }
 
-RegisterNetEvent('money:displayUpdate')
-
-AddEventHandler('money:displayUpdate', function(type, money)
-    local stat = moneyTypes[type]
+local function applyMoneyDisplay(moneyType, money)
+    local stat = moneyTypes[moneyType]
     if not stat then return end
     StatSetInt(stat, math.floor(money))
+end
+
+exports('setMoneyDisplay', function(source, moneyType, money)
+    applyMoneyDisplay(moneyType, money)
 end)
 
-TriggerServerEvent('money:requestDisplay')
+CreateThread(function()
+    local bagName = ('player:%s'):format(GetPlayerServerId(PlayerId()))
+
+    AddStateBagChangeHandler('money_cash', bagName, function(_, _, value)
+        if value then applyMoneyDisplay('cash', value) end
+    end)
+
+    AddStateBagChangeHandler('money_bank', bagName, function(_, _, value)
+        if value then applyMoneyDisplay('bank', value) end
+    end)
+end)
 
 CreateThread(function()
     while true do
