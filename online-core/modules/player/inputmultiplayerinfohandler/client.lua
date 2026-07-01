@@ -8,9 +8,13 @@ CreateThread(function()
             if isWaitingToTurnOff then
                 isWaitingToTurnOff = false
                 SetBigmapActive(false, false)
+                RemoveMultiplayerBankCash()
+                RemoveMultiplayerWalletCash()
             else
                 isWaitingToTurnOff = true
                 SetBigmapActive(true, false)
+                SetMultiplayerBankCash()
+                SetMultiplayerWalletCash()
 
                 CreateThread(function()
                     Wait(4350)
@@ -18,6 +22,8 @@ CreateThread(function()
                     if isWaitingToTurnOff then
                         isWaitingToTurnOff = false
                         SetBigmapActive(false, false)
+                        RemoveMultiplayerBankCash()
+                        RemoveMultiplayerWalletCash()
                     end
                 end)
             end
