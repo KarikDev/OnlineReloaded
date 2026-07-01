@@ -13,7 +13,8 @@ server_scripts {
 }
 
 client_scripts {
-    'modules/player/inputmultiplayerinfohandler/client.lua',
+    'modules/economy/client/client.lua',
+    'modules/player/inputmultiplayerinfohandler/client/client.lua',
 }
 
 
