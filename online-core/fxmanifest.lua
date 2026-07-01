@@ -7,14 +7,15 @@ version 'pre-a0.0.1'
 
 -- Load order matters: modules first, then the core that starts them.
 server_scripts {
-    'server/main.lua',
-    'modules/player/player-data/server/server.lua',
-    'modules/economy/server/server.lua',
+    'server/main.lua',  -- Main server controller handler.
+    'modules/player/player-data/server/server.lua', -- player data module
+    'modules/economy/server/server.lua', -- economy module
 }
 
 client_scripts {
-    'modules/economy/client/client.lua',
-    'modules/player/inputmultiplayerinfohandler/client/client.lua',
+    'modules/ui/loadingscreen/client/client.lua', -- loading screen
+    'modules/economy/client/client.lua', -- economy client display handler
+    'modules/player/inputmultiplayerinfohandler/client/client.lua', -- multiplayer info handler (Z)
 }
 
 
@@ -37,9 +38,8 @@ chat_theme 'gtao' {
 -- Loading Screen Module Handling
 
 files {
-    'modules/ui/loadingscreen/index.html',
-    'modules/ui/loadingscreen/bg.png',
+    'modules/ui/loadingscreen/client/index.html',
+    'modules/ui/loadingscreen/client/bg.png',
 }
 
-loadscreen 'modules/ui/loadingscreen/index.html'
-loadscreen_manual_shutdown 'yes'  -- ← add this
+loadscreen 'modules/ui/loadingscreen/client/index.html'

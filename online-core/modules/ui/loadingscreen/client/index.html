@@ -338,16 +338,6 @@
       pcount.textContent = d.players + ' players online';
     }
   });
-
-  // Browser-only demo — never runs in FiveM
-  if (!isFiveM) {
-    let demo = 0;
-    const demoInterval = setInterval(() => {
-      demo += Math.random() * 2.5 + 0.3;
-      if (demo >= 100) { demo = 100; clearInterval(demoInterval); }
-      setProgress(demo);
-    }, 80);
-  }
 </script>
 </body>
 </html>
