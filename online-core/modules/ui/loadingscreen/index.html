@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online Reloaded</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap');
+
+  body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: #0a0008;
+    font-family: 'Inter', sans-serif;
+    cursor: none;
+  }
+
+  /* ── Background image – swap src to your actual file ── */
+  .bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('bg.png'); /* drop your image as bg.png next to this file */
+    background-size: cover;
+    background-position: center 30%;
+    animation: slowZoom 20s ease-in-out infinite alternate;
+  }
+
+  @keyframes slowZoom {
+    from { transform: scale(1); }
+    to   { transform: scale(1); }
+  }
+
+  /* gradient overlays */
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top,    rgba(5,0,10,0.97) 0%, transparent 55%),
+      linear-gradient(to bottom, rgba(5,0,10,0.5)  0%, transparent 40%),
+      linear-gradient(to right,  rgba(5,0,10,0.4)  0%, transparent 50%);
+  }
+
+  .noise {
+    position: absolute;
+    inset: 0;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px;
+  }
+
+  /* ── scanline effect ── */
+  .scanlines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.04) 2px,
+      rgba(0,0,0,0.04) 4px
+    );
+    pointer-events: none;
+  }
+
+  /* ── content ── */
+  .content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 64px 52px;
+  }
+
+  /* logo */
+  .logo-wrap {
+    animation: fadeUp 1.2s cubic-bezier(0.22,1,0.36,1) both;
+    animation-delay: 0.2s;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .logo-online {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 10vw, 120px);
+    color: #fff;
+    line-height: 0.9;
+    letter-spacing: 4px;
+    text-shadow:
+      0 0 40px rgba(255,255,255,0.15),
+      2px 2px 0 rgba(0,0,0,0.6);
+  }
+
+  .logo-reloaded {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 10vw, 120px);
+    color: #ff1f6e;
+    line-height: 0.9;
+    letter-spacing: 4px;
+    text-shadow:
+      0 0 60px rgba(255,31,110,0.5),
+      0 0 120px rgba(255,31,110,0.25),
+      2px 2px 0 rgba(0,0,0,0.6);
+  }
+
+  /* ── bottom bar ── */
+  .bottom {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    animation: fadeUp 1.2s cubic-bezier(0.22,1,0.36,1) both;
+    animation-delay: 0.5s;
+  }
+
+  /* spinner + label */
+  .spinner-group {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgba(255,140,0,0.2);
+    border-top-color: #ff8c00;
+    border-right-color: #ff6000;
+    border-radius: 50%;
+    animation: spin 0.85s linear infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .loading-text {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ff8c00;
+  }
+
+  .loading-dots span {
+    animation: blink 1.4s infinite;
+    opacity: 0;
+  }
+  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes blink {
+    0%, 80%, 100% { opacity: 0; }
+    40%           { opacity: 1; }
+  }
+
+  /* progress bar */
+  .progress-wrap {
+    flex: 1;
+    max-width: 340px;
+    margin-left: 40px;
+  }
+
+  .progress-label {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .progress-track {
+    height: 2px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff6000, #ff8c00, #ffb300);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.4s ease;
+    box-shadow: 0 0 12px rgba(255,140,0,0.6);
+  }
+
+  /* right side info */
+  .server-info {
+    text-align: right;
+  }
+
+  .server-name {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 4px;
+  }
+
+  .player-count {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    color: rgba(255,140,0,0.5);
+  }
+
+  /* accent line top */
+  .top-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #ff6000, #ff8c00, #ff1f6e, transparent);
+    animation: slideIn 1s ease both;
+  }
+
+  @keyframes slideIn {
+    from { transform: scaleX(0); opacity: 0; }
+    to   { transform: scaleX(1); opacity: 1; }
+  }
+
+  /* ── intro flash ── */
+  .flash {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    pointer-events: none;
+    animation: flashOut 0.6s ease forwards;
+    z-index: 99;
+  }
+
+  @keyframes flashOut {
+    0%   { opacity: 0.15; }
+    100% { opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="flash"></div>
+<div class="bg"></div>
+<div class="overlay"></div>
+<div class="noise"></div>
+<div class="scanlines"></div>
+<div class="top-bar"></div>
+
+<div class="content">
+  <div class="logo-wrap">
+    <div class="logo-online">Online</div>
+    <div class="logo-reloaded">Reloaded</div>
+  </div>
+
+  <div class="bottom">
+    <div class="spinner-group">
+      <div class="spinner"></div>
+      <div class="loading-text">
+        Loading<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="stage-label">Connecting</span>
+        <span id="pct-label">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="bar"></div>
+      </div>
+    </div>
+
+    <div class="server-info">
+      <div class="server-name">Online Reloaded</div>
+      <div class="player-count" id="player-count">Joining server...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const bar   = document.getElementById('bar');
+  const pct   = document.getElementById('pct-label');
+  const stage = document.getElementById('stage-label');
+  const pcount = document.getElementById('player-count');
+
+  const stages = [
+    { label: 'Connecting',        end: 12  },
+    { label: 'Downloading assets',end: 45  },
+    { label: 'Loading map',       end: 72  },
+    { label: 'Initializing world',end: 90  },
+    { label: 'Almost ready',      end: 100 },
+  ];
+
+  let current = 0;
+  let progress = 0;
+
+  // Listen for FiveM NUI messages for real progress
+  window.addEventListener('message', (e) => {
+    const d = e.data;
+    if (d.eventName === 'loadProgress') {
+      setProgress(Math.round(d.loadFraction * 100));
+    }
+    if (d.eventName === 'onClientResourceStart') {
+      // bump progress slightly on each resource start
+    }
+    if (d.players) {
+      pcount.textContent = d.players + ' players online';
+    }
+  });
+
+  function setProgress(val) {
+    progress = val;
+    bar.style.width = val + '%';
+    pct.textContent = val + '%';
+    for (let i = stages.length - 1; i >= 0; i--) {
+      if (val >= (stages[i - 1]?.end ?? 0)) {
+        stage.textContent = stages[i].label;
+        break;
+      }
+    }
+  }
+
+  // Demo animation — remove or comment out when using on a real server
+  // (FiveM will drive progress via the message events above)
+  let demo = 0;
+  const demoInterval = setInterval(() => {
+    demo += Math.random() * 2.5 + 0.3;
+    if (demo >= 100) { demo = 100; clearInterval(demoInterval); }
+    setProgress(Math.round(demo));
+  }, 80);
+</script>
+</body>
+</html>

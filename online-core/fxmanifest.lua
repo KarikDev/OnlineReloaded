@@ -20,7 +20,7 @@ client_scripts {
 
 
 
--- Chat Handling
+-- Chat Theme Module Handling
 files {
     'modules/other/chat/style.css',
     'modules/other/chat/shadow.js',
@@ -33,3 +33,11 @@ chat_theme 'gtao' {
         default = '<b>{0}</b><span>[ALL]</span><span>{1}</span>'
     }
 }
+
+-- Loading Screen Module Handling
+
+files {
+    'modules/ui/loadingscreen/index.html',
+}
+
+loadscreen 'modules/ui/loadingscreen/index.html'
