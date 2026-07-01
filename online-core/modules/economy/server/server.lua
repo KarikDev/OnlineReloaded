@@ -143,7 +143,7 @@ RegisterCommand('earn', function(source, args)
     end
 
     if not exports[resourceName]:addMoney(source, moneyType, amount) then
-        notify(source, 'Usage: /earn (type) (amount)')
+        notify(source, 'Error: Failed to add money')
     end
 end, true)
 
