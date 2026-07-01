@@ -160,4 +160,3 @@ RegisterCommand('spend', function(source, args)
         print('you are broke??')
     end
 end, true)
-

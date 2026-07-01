@@ -4,7 +4,7 @@ local moneyTypes = {
 }
 
 local function applyMoneyDisplay(moneyType, money)
-    local stat = moneyTypes[moneyType]But t
+    local stat = moneyTypes[moneyType]
     if not stat then return end
     StatSetInt(stat, math.floor(money))
 end
